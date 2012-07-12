@@ -26,7 +26,7 @@ if xml
         end
     end
 end
-puts "Total #{total}"
+puts "Total #{format("%4.2f", total)}"
 
 
 
