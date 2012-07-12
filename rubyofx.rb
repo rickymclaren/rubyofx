@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby 
 require 'rexml/document'
 
+filter = /./
+filter = /#{ARGV[0]}/ if ARGV.length == 1
+
+total = 0
 files = Dir[`echo $HOME`.chomp + '/Downloads/*.ofx']
 xml = File.new(files[0]).read
 xml = xml[/(<OFX>.*<\/OFX>)/m, 1]
@@ -15,10 +19,14 @@ if xml
             name = child.text if child.name == 'NAME' 
             amount = child.text if child.name == 'TRNAMT'
         end
-        amount = ' ' * (10 - amount.length) + amount
-        puts "#{date} #{amount} #{name}"
+        amount_str = ' ' * (10 - amount.length) + amount
+        if name[/#{filter}/]
+            puts "#{date} #{amount_str} #{name}"
+            total += amount.to_f
+        end
     end
 end
+puts "Total #{total}"
 
 
 
