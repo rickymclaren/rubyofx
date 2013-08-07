@@ -14,11 +14,15 @@ if xml
         date = ''
         name = ''
         amount = ''
+        memo = ''
         transaction.elements.each do |child|
             date = child.text if child.name == 'DTPOSTED' 
             name = child.text if child.name == 'NAME' 
             amount = child.text if child.name == 'TRNAMT'
+            memo = child.text if child.name == 'MEMO'
         end
+        name = "#{name}:#{memo}" if memo != ''
+  
         amount_str = ' ' * (10 - amount.length) + amount
         if name[/#{filter}/]
             puts "#{date} #{amount_str} #{name}"
